@@ -12,12 +12,15 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import Typography from '@mui/material/Typography';
 
 import { useGetEmployees } from '../../hooks/useEmployees';
+
+import CreateEmployees from './CreateEmployees'; 
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -80,7 +83,7 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-export default function CustomPaginationActionsTable() {
+export default function TableEmployees() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -101,8 +104,18 @@ export default function CustomPaginationActionsTable() {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }} >
+      <Table sx={{ minWidth: 500 }}>
         <TableHead>
+          <TableRow sx={{ background: '#f3e5f5' }}>
+            <TableCell align="left" colSpan={2}>
+              <Typography variant="subtitle1" noWrap component="div">
+                Employees
+              </Typography>
+            </TableCell>
+            <TableCell align="right" colSpan={3}>
+              <CreateEmployees />
+            </TableCell>
+          </TableRow>
           <TableRow>
             <TableCell align="left">ID</TableCell>
             <TableCell align="left">Name</TableCell>

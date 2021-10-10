@@ -9,14 +9,14 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import ReactNotifications from '../Notifications/ReactNotifications';
 import api from '../../api/api';
 
-export default function FormDialog() {
+export default function CreateEmployees() {
   const [open, setOpen] = React.useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -40,6 +40,18 @@ export default function FormDialog() {
       salary: salary,
       date_admission: (!dateAdmission) ? null : dateAdmission.toLocaleDateString('en-CA')
     }
+
+    if (!params.name) 
+      return ReactNotifications('Warning', `Column name cannot be null.`, 'warning');
+
+    if (!params.email) 
+      return ReactNotifications('Warning', `Column email cannot be null.`, 'warning');
+
+    if (!params.salary) 
+      return ReactNotifications('Warning', `Column salary cannot be null.`, 'warning');
+
+    if (!params.date_admission) 
+      return ReactNotifications('Warning', `Column date_admission cannot be null.`, 'warning');
 
     try {
       const resp = await api.post('/employees', params);
@@ -65,7 +77,7 @@ export default function FormDialog() {
   return (
     <>
       {/* Buttom */}
-      <Button variant="contained" sx={{ marginBottom: 4, borderRadius: 50 }} onClick={handleClickOpen}>
+      <Button color="secondary" variant="contained" sx={{ borderRadius: 50 }} onClick={handleClickOpen}>
         <AddIcon />
       </Button>
       {/* Dialog Modal */}
