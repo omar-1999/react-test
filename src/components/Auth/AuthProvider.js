@@ -1,10 +1,10 @@
 import { createContext, useEffect, useState } from "react";
-import api from "../../api/api";
+import Axios from '../../api/api';
 import ReactNotifications from "../Notifications/ReactNotifications";
 
 export const AuthContext = createContext();
 
-const AuthProvider = ({children}) => {
+const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(
         JSON.parse(localStorage.getItem('user')) || null
     );
@@ -12,7 +12,7 @@ const AuthProvider = ({children}) => {
     useEffect(() => {
         try {
             localStorage.setItem('user', JSON.stringify(user));
-        } catch(err) {
+        } catch (err) {
             localStorage.removeItem('user');
             console.log(err)
         }
@@ -24,28 +24,19 @@ const AuthProvider = ({children}) => {
             setUser(params);
         },
         async logout() {
-            api.interceptors.request.use(
-                config => {
-                    config.headers.authorization = `Bearer ${user.access_token}`;
-                    return config;
-                },
-                error => {
-                    return Promise.reject(error);
-                }
-            );
             try {
-                const resp = await api.post('/logout');
-                console.log(user)
-                console.log(resp);
+                /*const resp = */await Axios(user.access_token).post('/logout');
+                // console.log(resp);
+                // console.log(user)
                 localStorage.removeItem('user');
                 setUser(null);
-            } catch(err) {
+            } catch (err) {
                 console.log(err);
                 ReactNotifications(
                     'Error',
                     'Hubo un error interno por favor intenta nuevamente',
                     'danger'
-                  );
+                );
             }
         },
         isLogged() {

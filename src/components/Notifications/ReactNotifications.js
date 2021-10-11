@@ -1,4 +1,6 @@
 import { store } from 'react-notifications-component';
+import 'animate.css/animate.min.css';
+import 'animate.css/animate.compat.css'
 
 const ReactNotifications = (title, message, type) => {
   return (

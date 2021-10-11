@@ -1,4 +1,3 @@
-// import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,7 +15,7 @@ import Logo from '../../images/LogoReact';
 import Copyright from '../Copyright';
 import useAuth from '../../components/Auth/useAuth';
 import ReactNotifications from '../../components/Notifications/ReactNotifications';
-import api from '../../api/api';
+import Axios from '../../api/api';
 
 
 const theme = createTheme();
@@ -44,16 +43,15 @@ export default function SignInSide() {
 
     // console.log(params)
     try {
-      const resp = await api.post('/login', params);
+      const resp = await Axios().post('/login', params);
       auth.login(resp.data)
       history.push(previusObjectURL || '/');
       // console.log(resp.data);
     } catch (err) {
-      console.log(err.response.data)
-      console.log(err.response.status)
+      console.log(err)
       ReactNotifications(
         'Error',
-        err.response.data,
+        'Hubo un error interno por favor intente nuevamente',
         'danger'
       );
     }

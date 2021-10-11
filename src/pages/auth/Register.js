@@ -1,4 +1,3 @@
-// import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,7 +12,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Logo from '../../images/LogoReact';
 import Copyright from '../Copyright';
 import ReactNotifications from '../../components/Notifications/ReactNotifications';
-import api from '../../api/api';
+import Axios from '../../api/api';
 import useAuth from '../../components/Auth/useAuth';
 
 const theme = createTheme();
@@ -49,7 +48,7 @@ export default function Register() {
       return ReactNotifications('Warning', `Passwords do not match.`, 'warning');
 
     try {
-      const resp = await api.post('/register', params);
+      const resp = await Axios().post('/register', params);
       auth.login(resp.data)
       history.push('/');
       // console.log(resp.data);
