@@ -1,31 +1,62 @@
-import * as React from 'react';
+// import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { Link as RouterLink, useHistory, useLocation } from 'react-router-dom';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Logo from '../images/LogoReact';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Copyright from './Copyright';
+import Logo from '../../images/LogoReact';
+import Copyright from '../Copyright';
+import useAuth from '../../components/Auth/useAuth';
+import ReactNotifications from '../../components/Notifications/ReactNotifications';
+import api from '../../api/api';
 
 
 const theme = createTheme();
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
+  const auth = useAuth();
+  const history = useHistory();
+  const location = useLocation();
+  const previusObjectURL = location.state?.from;
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
+    const params = {
       email: data.get('email'),
       password: data.get('password'),
-    });
+    };
+
+    if (!params.email)
+      return ReactNotifications('Warning', `Column email cannot be null.`, 'warning');
+
+    if (!params.password)
+      return ReactNotifications('Warning', `Column password cannot be null.`, 'warning');
+
+    // console.log(params)
+    try {
+      const resp = await api.post('/login', params);
+      auth.login(resp.data)
+      history.push(previusObjectURL || '/');
+      // console.log(resp.data);
+    } catch (err) {
+      console.log(err.response.data)
+      console.log(err.response.status)
+      ReactNotifications(
+        'Error',
+        err.response.data,
+        'danger'
+      );
+    }
   };
 
   return (
@@ -100,12 +131,12 @@ export default function SignInSide() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  <Link component={RouterLink} to={'#'} variant="body2">
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="/register" variant="body2">
+                  <Link component={RouterLink} to={'/register'} variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>

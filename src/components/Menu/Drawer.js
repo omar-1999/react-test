@@ -24,6 +24,7 @@ import Menu from '@mui/material/Menu';
 import { Link as RouterLink, Route, Switch } from 'react-router-dom';
 
 import TableEmployees from '../Employees/TableEmployees';
+import useAuth from '../Auth/useAuth';
 
 const drawerWidth = 240;
 
@@ -96,6 +97,7 @@ export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const auth = useAuth();
 
   const listItems = ['employees', 'test'];
 
@@ -165,7 +167,7 @@ export default function MiniDrawer() {
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
                 <Divider />
-                <MenuItem onClick={handleClose} component={RouterLink} to={'/login'}>Logout</MenuItem>
+                <MenuItem onClick={auth.logout}>Logout</MenuItem>
               </Menu>
             </div>
           </Toolbar>
