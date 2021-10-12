@@ -5,7 +5,6 @@ import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import NotFound from './pages/NotFound';
 import Drawer from './components/Menu/Drawer';
-// import PrivatesRoutes from './PrivatesRoutes';
 
 const PublicsRoutes = () => {
   return (

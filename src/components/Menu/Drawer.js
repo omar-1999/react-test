@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -95,14 +95,14 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function MiniDrawer() {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const auth = useAuth();
 
   const listItems = [{
     url: '/',
     text: 'Dashboard',
-  },{
+  }, {
     url: '/employees',
     text: 'Employees',
   }];
@@ -185,7 +185,7 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          {listItems.map((text, index) => 
+          {listItems.map((text, index) =>
           (
             <ListItem button key={index} component={RouterLink} to={text.url}>
               <ListItemIcon>
@@ -197,9 +197,17 @@ export default function MiniDrawer() {
           )}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{
+        backgroundColor: (theme) =>
+          theme.palette.mode === 'light'
+            ? theme.palette.grey[100]
+            : theme.palette.grey[900],
+        flexGrow: 1,
+        height: '100vh',
+        overflow: 'auto',
+      }}>
         <DrawerHeader />
-          <PrivatesRoutes />
+        <PrivatesRoutes />
       </Box>
     </Box>
   );
