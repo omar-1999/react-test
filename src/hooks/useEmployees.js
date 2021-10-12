@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
-import api from '../api/api';
+import Axios from '../api/api';
+import useAuth from '../components/Auth/useAuth';
 import ReactNotifications from '../components/Notifications/ReactNotifications';
 
 export const useGetEmployees = () => {
-
   const [employees, setEmployees] = useState([]);
+  const auth = useAuth();
 
   useEffect(() => {
     const getEmployees = async () => {
       try {
-        const resp = await api.get('/employees');
+        const resp = await Axios(auth.user.access_token).get('/employees');
         setEmployees(resp.data.data);
       } catch (err) {
         ReactNotifications(
@@ -17,12 +18,10 @@ export const useGetEmployees = () => {
           err.response.data.message.errorInfo[2],
           'danger'
         );
-        // console.log(err.response.data.message.errorInfo[2])
-        // console.log(err.response.status)
       }
-    }
+    };
     getEmployees();
-  }, [])
+  }, [auth])
 
   return {
     employees

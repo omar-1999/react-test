@@ -15,16 +15,16 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 
-import { Link as RouterLink, Route, Switch } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
-import TableEmployees from '../Employees/TableEmployees';
 import useAuth from '../Auth/useAuth';
+import PrivatesRoutes from '../../PrivatesRoutes';
 
 const drawerWidth = 240;
 
@@ -99,7 +99,13 @@ export default function MiniDrawer() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const auth = useAuth();
 
-  const listItems = ['employees', 'test'];
+  const listItems = [{
+    url: '/',
+    text: 'Dashboard',
+  },{
+    url: '/employees',
+    text: 'Employees',
+  }];
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -120,85 +126,81 @@ export default function MiniDrawer() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      {/* <Router> */}
-        <AppBar position="fixed" open={open} color="secondary">
-          <Toolbar>
+      <AppBar position="fixed" open={open} color="secondary">
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{
+              marginRight: '36px',
+              ...(open && { display: 'none' }),
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+            React Test
+          </Typography>
+          <div>
             <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
               color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
-              }}
             >
-              <MenuIcon />
+              <AccountCircle />
             </IconButton>
-            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-              React Test
-            </Typography>
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-                <Divider />
-                <MenuItem onClick={auth.logout}>Logout</MenuItem>
-              </Menu>
-            </div>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-            </IconButton>
-          </DrawerHeader>
-          <Divider />
-          <List>
-            {listItems.map((text, index) => (
-              <ListItem button key={text} component={RouterLink} to={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <AccountBoxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-        </Drawer>
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <DrawerHeader />
-          <Switch>
-            <Route path="/employees">
-              <TableEmployees />
-            </Route>
-          </Switch>
-        </Box>
-      {/* </Router> */}
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <Divider />
+              <MenuItem onClick={auth.logout}>Logout</MenuItem>
+            </Menu>
+          </div>
+        </Toolbar>
+      </AppBar>
+      <Drawer variant="permanent" open={open}>
+        <DrawerHeader>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+        <List>
+          {listItems.map((text, index) => 
+          (
+            <ListItem button key={index} component={RouterLink} to={text.url}>
+              <ListItemIcon>
+                {index % 2 === 0 ? <DashboardIcon /> : <AccountBoxIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text.text} />
+            </ListItem>
+          )
+          )}
+        </List>
+      </Drawer>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <DrawerHeader />
+          <PrivatesRoutes />
+      </Box>
     </Box>
   );
 }

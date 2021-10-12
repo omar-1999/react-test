@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import { useState, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import TextField from '@mui/material/TextField';
@@ -14,14 +14,16 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import ReactNotifications from '../Notifications/ReactNotifications';
-import api from '../../api/api';
+import Axios from '../../api/api';
+import useAuth from '../Auth/useAuth';
 
 export default function CreateEmployees() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [salary, setSalary] = React.useState(null);
-  const [dateAdmission, setDateAdmission] = React.useState(null);
+  const [salary, setSalary] = useState(null);
+  const [dateAdmission, setDateAdmission] = useState(null);
+  const auth = useAuth();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -33,7 +35,7 @@ export default function CreateEmployees() {
 
   const createEmployee = async (e) => {
     e.preventDefault();
-    
+
     const params = {
       name: name,
       email: email,
@@ -41,20 +43,20 @@ export default function CreateEmployees() {
       date_admission: (!dateAdmission) ? null : dateAdmission.toLocaleDateString('en-CA')
     }
 
-    if (!params.name) 
+    if (!params.name)
       return ReactNotifications('Warning', `Column name cannot be null.`, 'warning');
 
-    if (!params.email) 
+    if (!params.email)
       return ReactNotifications('Warning', `Column email cannot be null.`, 'warning');
 
-    if (!params.salary) 
+    if (!params.salary)
       return ReactNotifications('Warning', `Column salary cannot be null.`, 'warning');
 
-    if (!params.date_admission) 
+    if (!params.date_admission)
       return ReactNotifications('Warning', `Column date_admission cannot be null.`, 'warning');
 
     try {
-      const resp = await api.post('/employees', params);
+      const resp = await Axios(auth.user.access_token).post('/employees', params);
       // console.log(resp.data.data)
       // console.log(resp.status)
       ReactNotifications(
@@ -63,7 +65,7 @@ export default function CreateEmployees() {
         'success'
       );
       setOpen(false);
-    } catch(err) {
+    } catch (err) {
       // console.log(err.response.data.message.errorInfo[2])
       // console.log(err.response.status)
       ReactNotifications(
@@ -126,7 +128,7 @@ export default function CreateEmployees() {
               name="salary"
               id="salary"
               InputProps={{
-                  inputComponent: NumberFormatCustom,
+                inputComponent: NumberFormatCustom,
               }}
               variant="standard"
             />
@@ -153,7 +155,7 @@ export default function CreateEmployees() {
   );
 }
 
-const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(props, ref) {
+const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
   const { onChange, ...other } = props;
 
   return (

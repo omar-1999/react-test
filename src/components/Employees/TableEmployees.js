@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -20,7 +20,7 @@ import Typography from '@mui/material/Typography';
 
 import { useGetEmployees } from '../../hooks/useEmployees';
 
-import CreateEmployees from './CreateEmployees'; 
+import CreateEmployees from './CreateEmployees';
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -84,8 +84,8 @@ TablePaginationActions.propTypes = {
 };
 
 export default function TableEmployees() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const { employees } = useGetEmployees();
 
