@@ -17,10 +17,13 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
 
 import { useGetEmployees } from '../../hooks/useEmployees';
 
 import CreateEmployees from './CreateEmployees';
+import Copyright from '../../pages/Copyright';
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -103,78 +106,85 @@ export default function TableEmployees() {
   };
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }}>
-        <TableHead>
-          <TableRow sx={{ background: '#f3e5f5' }}>
-            <TableCell align="left" colSpan={2}>
-              <Typography variant="subtitle1" noWrap component="div">
-                Employees
-              </Typography>
-            </TableCell>
-            <TableCell align="right" colSpan={3}>
-              <CreateEmployees />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell align="left">ID</TableCell>
-            <TableCell align="left">Name</TableCell>
-            <TableCell align="left">Email</TableCell>
-            <TableCell align="left">Salary</TableCell>
-            <TableCell align="left">Date Admission</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {(rowsPerPage > 0
-            ? employees.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : employees
-          ).map((row) => (
-            <TableRow key={row.id}>
-              <TableCell style={{ width: 60 }} align="left">
-                {row.id}
-              </TableCell>
-              <TableCell style={{ width: 160 }} align="left">
-                {row.name}
-              </TableCell>
-              <TableCell style={{ width: 160 }} align="left">
-                {row.email}
-              </TableCell>
-              <TableCell style={{ width: 160 }} align="left">
-                {row.salary}
-              </TableCell>
-              <TableCell style={{ width: 160 }} align="left">
-                {row.date_admission}
-              </TableCell>
-            </TableRow>
-          ))}
+    <>
+      <Container sx={{ mt: 2, mb: 4 }}>
+        <Grid container spacing={2} sx={{ mt: 2 }}>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 500 }}>
+              <TableHead>
+                <TableRow sx={{ background: '#f3e5f5' }}>
+                  <TableCell align="left" colSpan={2}>
+                    <Typography variant="subtitle1" noWrap component="div">
+                      Employees
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="right" colSpan={3}>
+                    <CreateEmployees />
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell align="left">ID</TableCell>
+                  <TableCell align="left">Name</TableCell>
+                  <TableCell align="left">Email</TableCell>
+                  <TableCell align="left">Salary</TableCell>
+                  <TableCell align="left">Date Admission</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(rowsPerPage > 0
+                  ? employees.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : employees
+                ).map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell style={{ width: 60 }} align="left">
+                      {row.id}
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="left">
+                      {row.name}
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="left">
+                      {row.email}
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="left">
+                      {row.salary}
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="left">
+                      {row.date_admission}
+                    </TableCell>
+                  </TableRow>
+                ))}
 
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
-            </TableRow>
-          )}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              colSpan={5}
-              count={employees.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              SelectProps={{
-                inputProps: {
-                  'aria-label': 'rows per page',
-                },
-                native: true,
-              }}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
-            />
-          </TableRow>
-        </TableFooter>
-      </Table>
-    </TableContainer>
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    colSpan={5}
+                    count={employees.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: {
+                        'aria-label': 'rows per page',
+                      },
+                      native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
+        </Grid>
+        <Copyright sx={{ pt: 4 }} />
+      </Container>
+    </>
   );
 }
