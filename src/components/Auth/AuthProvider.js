@@ -25,9 +25,7 @@ const AuthProvider = ({ children }) => {
         },
         async logout() {
             try {
-                /*const resp = */await Axios(user.access_token).post('/logout');
-                // console.log(resp);
-                // console.log(user)
+                await Axios(user.access_token).post('/logout');
                 localStorage.removeItem('user');
                 setUser(null);
             } catch (err) {

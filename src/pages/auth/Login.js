@@ -41,12 +41,10 @@ export default function SignInSide() {
     if (!params.password)
       return ReactNotifications('Warning', `Column password cannot be null.`, 'warning');
 
-    // console.log(params)
     try {
       const resp = await Axios().post('/login', params);
       auth.login(resp.data)
       history.push(previusObjectURL || '/');
-      // console.log(resp.data);
     } catch (err) {
       console.log(err)
       ReactNotifications(

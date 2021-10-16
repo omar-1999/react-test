@@ -12,19 +12,13 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 
-import { Link as RouterLink } from 'react-router-dom';
-
 import useAuth from '../Auth/useAuth';
 import PrivatesRoutes from '../../PrivatesRoutes';
+import ListItems from './ListItems';
 
 const drawerWidth = 240;
 
@@ -99,14 +93,6 @@ export default function MiniDrawer() {
   const [anchorEl, setAnchorEl] = useState(null);
   const auth = useAuth();
 
-  const listItems = [{
-    url: '/',
-    text: 'Dashboard',
-  }, {
-    url: '/employees',
-    text: 'Employees',
-  }];
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -169,8 +155,7 @@ export default function MiniDrawer() {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleClose}>{auth.user.user.name}</MenuItem>
               <Divider />
               <MenuItem onClick={auth.logout}>Logout</MenuItem>
             </Menu>
@@ -185,16 +170,8 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          {listItems.map((text, index) =>
-          (
-            <ListItem button key={index} component={RouterLink} to={text.url}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <DashboardIcon /> : <AccountBoxIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text.text} />
-            </ListItem>
-          )
-          )}
+          {/* List Items */}
+          <ListItems />
         </List>
       </Drawer>
       <Box component="main" sx={{

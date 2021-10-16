@@ -1,8 +1,7 @@
-import { useState, forwardRef } from 'react';
+import { useState, forwardRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -14,8 +13,8 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import ReactNotifications from '../Notifications/ReactNotifications';
-import Axios from '../../api/api';
-import useAuth from '../Auth/useAuth';
+
+import { EmployeeContext } from '../../context/EmployeeContext';
 
 export default function CreateEmployees() {
   const [open, setOpen] = useState(false);
@@ -23,7 +22,8 @@ export default function CreateEmployees() {
   const [email, setEmail] = useState('');
   const [salary, setSalary] = useState(null);
   const [dateAdmission, setDateAdmission] = useState(null);
-  const auth = useAuth();
+  
+  const { AddEmployee } = useContext(EmployeeContext);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -55,25 +55,8 @@ export default function CreateEmployees() {
     if (!params.date_admission)
       return ReactNotifications('Warning', `Column date_admission cannot be null.`, 'warning');
 
-    try {
-      const resp = await Axios(auth.user.access_token).post('/employees', params);
-      // console.log(resp.data.data)
-      // console.log(resp.status)
-      ReactNotifications(
-        'Exito',
-        `Empleado ${resp.data.data.name} creado correctamente`,
-        'success'
-      );
-      setOpen(false);
-    } catch (err) {
-      // console.log(err.response.data.message.errorInfo[2])
-      // console.log(err.response.status)
-      ReactNotifications(
-        'Error',
-        err.response.data.message.errorInfo[2],
-        'danger'
-      );
-    }
+    AddEmployee(params);
+    setOpen(false);
   }
 
   return (
@@ -113,38 +96,33 @@ export default function CreateEmployees() {
             fullWidth
             variant="standard"
           />
-          <Box
-            sx={{
-              '& > :not(style)': {
-                m: 2,
-              },
+          {/* salary */}
+          <TextField
+            sx={{ mb: 4 }}
+            label="Salary"
+            value={salary}
+            onChange={(event) => setSalary(event.target.value)}
+            name="salary"
+            id="salary"
+            fullWidth
+            InputProps={{
+              inputComponent: NumberFormatCustom,
             }}
-          >
-            {/* salary */}
-            <TextField
-              label="Salary"
-              value={salary}
-              onChange={(event) => setSalary(event.target.value)}
-              name="salary"
-              id="salary"
-              InputProps={{
-                inputComponent: NumberFormatCustom,
-              }}
-              variant="standard"
-            />
+            variant="standard"
+          />
 
-            {/* date_admission */}
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                label="Date Admission"
-                value={dateAdmission}
-                onChange={(newValue) => {
-                  setDateAdmission(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-          </Box>
+          {/* date_admission */}
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              label="Date Admission"
+              value={dateAdmission}
+              fullWidth
+              onChange={(newValue) => {
+                setDateAdmission(newValue);
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
         </DialogContent>
         <DialogActions>
           <Button variant="contained" color="secondary" onClick={handleClose}>Cancel</Button>

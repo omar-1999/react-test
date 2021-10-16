@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -7,8 +8,15 @@ import PieChart from './PieChart';
 import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
+import { RequestContext } from '../../context/RequestContext';
 
 const Dashboard = () => {
+  const { GetRequest, request } = useContext(RequestContext);
+  // Get request 
+  GetRequest();
+  // Assign values
+  let arrayRequests = (request !== undefined) ? request : [];
+
   return (
     <Container sx={{ mt: 2, mb: 4 }}>
       <Grid container spacing={2}>
@@ -61,7 +69,7 @@ const Dashboard = () => {
               height: 240,
             }}
           >
-            <BarChart />
+            <BarChart data={arrayRequests} />
           </Paper>
         </Grid>
         {/* Recent Orders */}

@@ -20,10 +20,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 
-import CreateEmployees from './CreateEmployees';
+import { RequestContext } from '../../context/RequestContext';
+
+import CreateRequest from './CreateRequest';
 import Copyright from '../../pages/Copyright';
-import {EmployeeContext} from '../../context/EmployeeContext';
-// import { useGetEmployees } from '../../hooks/useEmployees';
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -86,18 +86,20 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-export default function TableEmployees() {
+export default function TableRequest() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const {GetEmployees, employees} = useContext(EmployeeContext);
-  // Get employees 
-  GetEmployees();
+
+  const {GetRequest, request} = useContext(RequestContext);
+  // Get request 
+  GetRequest();
   // Assign values
-  let arrayEmployees = (employees !== undefined) ? employees : [];
-  // console.log(employees)
+  let arrayRequests = (request !== undefined) ? request : [];
+  // console.log(request)
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - arrayEmployees.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - arrayRequests.length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -118,41 +120,33 @@ export default function TableEmployees() {
                 <TableRow sx={{ background: '#f3e5f5' }}>
                   <TableCell align="left" colSpan={2}>
                     <Typography variant="subtitle1" noWrap component="div">
-                      Employees
+                      Request
                     </Typography>
                   </TableCell>
                   <TableCell align="right" colSpan={3}>
-                    <CreateEmployees />
+                    <CreateRequest />
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell align="left">ID</TableCell>
-                  <TableCell align="left">Name</TableCell>
-                  <TableCell align="left">Email</TableCell>
-                  <TableCell align="left">Salary</TableCell>
-                  <TableCell align="left">Date Admission</TableCell>
+                  <TableCell align="left">Description</TableCell>
+                  <TableCell align="left">Price</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {((rowsPerPage > 0)
-                  ? arrayEmployees.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  : arrayEmployees
+                {(rowsPerPage > 0
+                  ? arrayRequests.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : arrayRequests
                 ).map((row) => (
                   <TableRow key={row.id}>
                     <TableCell style={{ width: 60 }} align="left">
                       {row.id}
                     </TableCell>
                     <TableCell style={{ width: 160 }} align="left">
-                      {row.name}
+                      {row.description}
                     </TableCell>
                     <TableCell style={{ width: 160 }} align="left">
-                      {row.email}
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      {row.salary}
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      {row.date_admission}
+                      {row.price}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -168,7 +162,7 @@ export default function TableEmployees() {
                   <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     colSpan={5}
-                    count={arrayEmployees.length}
+                    count={arrayRequests.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     SelectProps={{
